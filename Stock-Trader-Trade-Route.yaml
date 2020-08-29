@@ -1,0 +1,13 @@
+# Source: traderlite/templates/tradr.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: acmetrader-tradr
+  annotations:
+    description: Route for application's http service
+    haproxy.router.openshift.io/disable_cookies: 'false'
+spec:
+  path: '/tradr'
+  to:
+    kind: Service
+    name: acmetrader-tradr-service

@@ -1,0 +1,12 @@
+# Source: traderlite/templates/tradr.yaml
+#Deploy the service
+apiVersion: v1
+kind: Service
+metadata:
+  name: acmetrader-tradr-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+  selector:
+    app: acmetrader-tradr

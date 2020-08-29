@@ -1,0 +1,62 @@
+# Source: traderlite/templates/tradr.yaml
+#       Copyright 2018 IBM Corp All Rights Reserved
+
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+
+#       http://www.apache.org/licenses/LICENSE-2.0
+
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+#Deploy the pod
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acmetrader-tradr
+spec:
+  selector:
+    matchLabels:
+      app: acmetrader-tradr
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: acmetrader-tradr
+        solution: acmetrader-lite-trader
+        version: v1
+    spec:
+      containers:
+      - name: acmetrader-tradr
+        image: "clouddragons/tradr-node-jquery-cp4i:1.0"
+        env:
+          - name: STOCK_QUOTE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: acmetrader-config
+                key: stockQuote.url
+                optional: true
+          - name: TRADE_HISTORY_URL
+            valueFrom:
+              configMapKeyRef:
+                name: acmetrader-config
+                key: tradeHistory.url
+          - name: PORTFOLIO_URL
+            valueFrom:
+              configMapKeyRef:
+                name: acmetrader-config
+                key: portfolio.url
+        ports:
+          - containerPort: 3000
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        imagePullPolicy: Always
